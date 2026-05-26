@@ -1,14 +1,21 @@
-package com.msedcl.main.entity;
+package com.msedcl.main.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 import com.msedcl.main.entity.Employee;
 import com.msedcl.main.repository.EmployeeRepository;
 import com.msedcl.main.repository.EmployeeRepositoryImpl;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
-	private static final EmployeeRepository employeeRepository 
-										= new EmployeeRepositoryImpl();
+	private EmployeeRepository employeeRepository;
+
+	public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+		super();
+		this.employeeRepository = employeeRepository;
+	}
 
 	@Override
 	public Employee addNewEmployee(Employee employee) {
@@ -26,18 +33,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public List<Employee> getEmployeeByName(String employeeName) {
+		// TODO Auto-generated method stub
+		return employeeRepository.getAllEmployees();
+	}
+
+	@Override
 	public boolean deleteEmployeeByEmployeeId(int employeeId) {
 		return employeeRepository.deleteEmployeeByEmployeeId(employeeId);
 	}
 
 	@Override
 	public List<Employee> getAllEmployees() {
+		// TODO Auto-generated method stub
 		return employeeRepository.getAllEmployees();
 	}
+
 	@Override
-	public List<Employee> getEmployeeByName(String Name)
-	{
-		return employeeRepository.getEmployeeByName(Name);
+	public long getCountOfEmployees() {
+		// TODO Auto-generated method stub
+		return employeeRepository.getCountOfEmployees();
 	}
 
 }

@@ -1,18 +1,20 @@
-package com.msedcl.main.entity;
+package com.msedcl.main;
 
+import java.lang.reflect.AnnotatedArrayType;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.msedcl.main.entity.Employee;
-import com.msedcl.main.util.HibernateUtil;
+import com.msedcl.main.service.EmployeeService;
+import com.msedcl.main.service.EmployeeServiceImpl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.transaction.TransactionManager;
-
-public class EmployeeCRUDMain {
+public class EmployeeCURDMainV2 {
 	public static void main(String[] args) {
-		EmployeeService employeeService = new EmployeeServiceImpl();
+		AnnotationConfigApplicationContext applicationContext 
+		=	new AnnotationConfigApplicationContext("com.msedcl.main");
+		EmployeeService employeeService = applicationContext.getBean(EmployeeServiceImpl.class);
 		Scanner scanner = new Scanner(System.in);
 		int employeeId, choice;
 		String name, continueChoice;
@@ -25,21 +27,23 @@ public class EmployeeCRUDMain {
 			System.out.println("3. Delete Employee By EmployeeId");
 			System.out.println("4. Update Name of Existing Employee");
 			System.out.println("5. Select All Employees");
-			System.out.println("6. Search Employee by Name");
-			System.out.println("7. Print total Emp count");
+			System.out.println("6. Search Employee By Name");
+			System.out.println("7. Print Total Employees");
+
 			System.out.println("Enter your choice");
 			choice = scanner.nextInt();
 			switch (choice) {
 			case 7:
 				long count = employeeService.getCountOfEmployees();
-				
+				System.out.println("Total Employee Count = " + count);
 				break;
 			case 6:
-				System.out.println("Enter name");
-				name=scanner.next();
-				List<Employee> employeeList = employeeService.getAllEmployees()
+				System.out.println("Enter Name");
+				name = scanner.next();
+				List<Employee> employeeList = employeeService.getEmployeeByName(name);
+				employeeList.forEach(e -> System.out.println(e));
 				break;
-				
+
 			case 1:
 				System.out.println("Enter Name");
 				name = scanner.next();
@@ -93,6 +97,7 @@ public class EmployeeCRUDMain {
 			System.out.println("Do you want to continue?");
 			continueChoice = scanner.next();
 		} while (continueChoice.equals("yes"));
-
+		applicationContext.close();
+		scanner.close();
 	}
 }
